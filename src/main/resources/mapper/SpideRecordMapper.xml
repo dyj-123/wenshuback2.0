@@ -1,0 +1,66 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.wenshu.mapper.SpideRecordMapper">
+    <resultMap id="SpideRecordMapperMap" type="com.example.wenshu.model.SpideRecord">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <id column="startTime" property="startTime" jdbcType="TIMESTAMP"/>
+        <id column="endTime" property="endTime" jdbcType="TIMESTAMP"/>
+        <id column="wenshuNum" property="wenshuNum" jdbcType="VARCHAR"/>
+        <id column="conditions" property="condition" jdbcType="VARCHAR"/>
+        <id column="curStatus" property="status" jdbcType="VARCHAR"/>
+        <id column="spiderName" property="spiderName" jdbcType="VARCHAR"/>
+        <id column="anjianType" property="anjianType" jdbcType="VARCHAR"/>
+        <id column="progress" property="progress" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+    <insert id="addRecord" keyColumn="id" parameterType="com.example.wenshu.model.SpideRecord">
+      insert into record(startTime,endTime,wenshuNum,curStatus,spiderName,conditions,anjianType,progress,node)
+      values (#{startTime},#{endTime},#{wenshuNum},#{status},#{spiderName},#{condition},#{anjianType},#{progress},#{node})
+    </insert>
+
+    <select id="selectRecord" resultMap="SpideRecordMapperMap">
+        SELECT * from record where curStatus!=4 and node like CONCAT('%', #{node}, '%')
+    </select>
+    <select id="getStatus" resultType="java.lang.Integer">
+        SELECT curStatus from record where spiderName = #{spiderName}
+    </select>
+    <select id="getFinishRecord" resultMap="SpideRecordMapperMap">
+        SELECT * from record where curStatus=2 or curStatus=0 or curStatus=4
+        ORDER BY startTime DESC
+    </select>
+    <select id="getRecordByName" resultMap="SpideRecordMapperMap">
+        SELECT * from record where spiderName = #{thread}
+    </select>
+
+    <update id="updateNum" parameterType="com.example.wenshu.model.SpideRecord" >
+
+          update record set wenshuNum = #{num}
+          where spiderName = #{spiderName}
+
+    </update>
+
+    <update id="editRecord" parameterType="com.example.wenshu.model.SpideRecord">
+        update record set wenshuNum = #{wenshuNum},endTime = #{endTime},curStatus=#{status},progress=#{progress},skip=#{skip}
+        where spiderName = #{spiderName}
+    </update>
+
+    <update id="removeSpider" parameterType="com.example.wenshu.model.SpideRecord">
+        update record set curStatus=4
+        where spiderName = #{thread}
+    </update>
+
+    <delete id="deleteSpider" >
+          delete from record where spiderName=#{spiderName}
+    </delete>
+
+    <select id="getSpidingNum" resultType="java.lang.Integer">
+         select count(*) from record where curStatus=1
+    </select>
+
+    <select id="getSpiderByDate"  resultMap="SpideRecordMapperMap">
+        select * from record where startTime like CONCAT('%', #{today}, '%')
+    </select>
+
+</mapper>

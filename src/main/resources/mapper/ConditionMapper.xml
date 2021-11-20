@@ -1,0 +1,19 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.wenshu.mapper.ConditionMapper">
+    <resultMap id="ConditionMapperMap" type="com.example.wenshu.model.Condition">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <id column="xuhao" property="xuhao" jdbcType="VARCHAR"/>
+        <id column="name" property="name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="findXuhaoByName" resultType="java.lang.String">
+        select xuhao from wenshu.condition where name=#{name}
+    </select>
+    <select id="findNameByXuhao" resultType="java.lang.String">
+        select name from wenshu.condition where xuhao=#{xuhao}
+    </select>
+
+</mapper>

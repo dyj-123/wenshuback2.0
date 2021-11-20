@@ -1,0 +1,73 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.wenshu.mapper.WenshuMapper">
+    <resultMap id="WenshuMapperMap" type="com.example.wenshu.model.Wenshu">
+        <id column="title" property="title" jdbcType="VARCHAR"/>
+        <id column="court" property="court" jdbcType="VARCHAR"/>
+        <id column="reason" property="reason" jdbcType="VARCHAR"/>
+        <id column="num" property="num" jdbcType="VARCHAR"/>
+        <id column="Id" property="Id" jdbcType="VARCHAR"/>
+        <id column="detailType" property="date" jdbcType="VARCHAR"/>
+        <id column="anjianType" property="anjianType" jdbcType="VARCHAR"/>
+        <id column="file" property="file" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <insert id="insert" keyColumn="Id" parameterType="com.example.wenshu.model.Wenshu">
+      insert into wenshu(title,court,reason,num,Id,detailType,date,anjianType,file,time,spiderName)
+      values (#{title},#{court},#{reason},#{num},#{Id},#{detailType},#{date},#{anjianType},#{file},#{time},#{spiderName})
+    </insert>
+    <select id="selectByType" resultType="com.example.wenshu.model.Wenshu">
+        SELECT title,court,reason,num,Id,detailType,date,anjianType,file FROM wenshu where
+       anjianType  LIKE CONCAT('%', #{anjianType}, '%')
+        <if test="title != null and title != ''"> and title Like CONCAT('%',#{title},'%') </if>
+        <if test="court != null and court != ''"> and  court  LIKE CONCAT('%', #{court}, '%')</if>
+        <if test="num != null and num != ''"> and  num  LIKE CONCAT('%', #{num}, '%')</if>
+        <if test="file != null and file != ''"> and  file  LIKE CONCAT('%', #{file}, '%')</if>
+
+    </select>
+    <select id="selectByType_COUNT" resultType="Long">
+        SELECT count(Id) FROM wenshu where
+        anjianType  LIKE CONCAT('%', #{anjianType}, '%')
+        <if test="title != null and title != ''"> and title Like CONCAT('%',#{title},'%') </if>
+        <if test="court != null and court != ''"> and  court  LIKE CONCAT('%', #{court}, '%')</if>
+        <if test="num != null and num != ''"> and  num  LIKE CONCAT('%', #{num}, '%')</if>
+        <if test="file != null and file != ''"> and  file  LIKE CONCAT('%', #{file}, '%')</if>
+
+    </select>
+    <select id="getselectNum" resultType="java.lang.Integer">
+        SELECT count(*) FROM wenshu where anjianType  LIKE CONCAT('%', #{anjianType}, '%')
+        <if test="title != null and title != ''"> and title Like CONCAT('%',#{title},'%') </if>
+        <if test="court != null and court != ''"> and  court  LIKE CONCAT('%', #{court}, '%')</if>
+        <if test="num != null and num != ''"> and  num  LIKE CONCAT('%', #{num}, '%')</if>
+        <if test="file != null and file != ''"> and  file  LIKE CONCAT('%', #{file}, '%')</if>
+
+    </select>
+    <select id="numByType" resultType="java.lang.Integer">
+        SELECT count(*) FROM wenshu where anjianType=#{anjianType}
+    </select>
+    <select id="findNameById" resultType="java.lang.String">
+        select type from anjiantype where Id = #{Id}
+    </select>
+    <select id="getWenshuHtml" resultType="java.lang.String">
+        select file from wenshu where Id = #{Id}
+    </select>
+
+   <select id="getNumByDate" resultType="java.lang.Integer">
+        select count(*) from wenshu where time  Like CONCAT('%',#{date},'%')
+    </select>
+
+    <select id="getNumByLevel" resultType="java.lang.Integer">
+        select count(*) from wenshu where court like CONCAT('%',#{level},'%')
+    </select>
+    <select id="getNumByCity" resultType="java.lang.Integer">
+        select count(*) from wenshu where court like CONCAT('%',#{city},'%')
+    </select>
+
+    <select id="findWenshuBySpider" resultType="com.example.wenshu.model.Wenshu">
+        select * from wenshu where spiderName = #{spiderName}
+    </select>
+
+
+</mapper>
