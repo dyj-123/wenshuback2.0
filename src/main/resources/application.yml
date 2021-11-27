@@ -39,4 +39,6 @@ management:
   health:
     solr:
       enabled: false
-
+sso:
+  clientId: Tp8uecHJi00aHlpufk8Fqp2A_2zpaKzS
+  secret: f1Pm1ekcxfDWd3T6r7dluV-mfEi_Hh7f
